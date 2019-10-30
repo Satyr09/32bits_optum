@@ -1,0 +1,27 @@
+Procedure:-
+
+1)Cleaning:-
+	a)We first convert the data given in .txt files to more usable csv files.
+	b)After that we calculate many features mean and median to canculate important features of the time series data
+	and add them in the csv file along with static data
+	c)we then delete the columns having more than 400 missing values 
+	d)we also parse the data from result.txt and add it to our main csv file
+2)Analysis:-
+	a)Firstly we tried to fit the data directly to few models but after grid-search
+	we could not increace acc more than 83% also the false negetive rate was high
+	b)For this purpose we further divide the data to 4 types based on icu types
+	c)By doing this we increase the mean acc upto 86% and also reduced the false negative rates
+	d)For reducing false negetive we also used () to sythetically generate data and reduce the imbalance
+	e)We used grid search to find optimal number of features and tune their parameters to get the best result
+3)Result:-
+	acc:-86.45% in set b
+	By employing the above methods we were also able to find out key factors to look for each type of patient(icy_type)
+	
+	for type-I
+		gcs,creatinine,bun,urine
+	for type-II
+		gcs,bun,creatinine,urine,glucose,sodium
+	for type-III
+		creatinine,bun,gcs,glucose,urine
+	for type-IV
+		creatinine,gcs,platelate,age,heart-rate,bun
