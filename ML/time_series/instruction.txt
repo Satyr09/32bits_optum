@@ -1,0 +1,4 @@
+1)go to main
+2)select the required type
+3)enter the name of the file containing timeseries data
+4)output will be 1-step forecast

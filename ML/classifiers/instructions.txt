@@ -1,0 +1,25 @@
+1)go to classifier_pickles
+2)choose a pickle according to icu type
+3) enter data as per required(mentioned below)
+4)output will be either 1 or 0
+
+
+Required data:-
+---------------------------------------------------------------------------
+1
+
+('GCS_mean', ('Platelets_mean', ('WBC_25q', ('Glucose_Max(D)-Min(D)', ('Na_25q', ('BUN_mean', ('Glucose_mode', ('Urine_Max(D)-Min(D)',  ('Na_Max(D)', ('HCT_Max(D)',  ('K_sum', ('HCO3_Max(D)', ('Platelets_F',  ('BUN_Max(D)-Min(D)', ('Platelets_std', 'BUN_sum', 'BUN_50q', 'WBC_med','HR_F-L','GCS_Max',
+--------------------------------------------------------------------------
+
+2
+('HR_F', ('Platelets_F-L', ('Urine_a(me-med)', ('Mg_Max(D)', ('Platelets_std', ('Gender', ('Na_mean', ('BUN_F', ('Na_med', ('HCO3_mean', ('BUN_sum', ('Glucose_a(me-med)', ('GCS_len', ('Glucose_Max', ('GCS_Max', ('HCO3_25q', ('Glucose_F', ('Mg_mean', ('HCO3_med', ('GCS_F-L', 
+
+------------------------------------------------------------------------------
+3
+
+('GCS_50q', ('Urine_Min', ('HCO3_a(me-med)', ('BUN_Min', ('Urine_Max', ('GCS_Max(D)', ('GCS_Max', ('Creatinine_F-L', ('BUN_mode',  ('Urine_50q',  ('HR_F',  ('Na_mean', ('BUN_mean',  ('GCS_mean(D)',  ('WBC_Min',  ('HR_sum', ('Urine_sum', ('HR_25q', ('BUN_50q', ('HCO3_25q', 
+------------------------------------------------------------------------------
+4
+
+('HR_len's, ('Urine_std', ('HR_F', ('GCS_len', ('Urine_mean', ('Platelets_a(me-med)', ('HCO3_Max(D)', ('BUN_med', ('HCT_50q', ('WBC_a(me-med)', ('Glucose_mean', ('Age', ('GCS_50q', ('GCS_mean', ('Urine_med', ('HR_sum', ('BUN_Min',  ('Urine_a(me-med)', ('WBC_50q', ('GCS_med', 
+-------------------------------------------------------------------------------
