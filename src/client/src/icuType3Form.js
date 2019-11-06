@@ -14,11 +14,14 @@ import CloseIcon from "@material-ui/icons/Close";
 import { amber, green } from "@material-ui/core/colors";
 import IconButton from "@material-ui/core/IconButton";
 
-function IcuType1Form({ id, classes, name, db, setFresh, setLoading }) {
+function IcuType3Form({ id, classes, name, db, setFresh, setLoading }) {
   let [gcs, setGCS] = useState(0);
   let [urine, setUrine] = useState(0);
   let [bun, setBun] = useState(0);
   let [creatanine, setCreatanine] = useState(0);
+  let [glucose, setGlucose] = useState(0);
+  let [sodium, setSodium] = useState(0);
+
   let [predicted, setPredictFlag] = useState(false);
   let [disabled, setDisabled] = useState(false);
   let [open, setOpen] = useState(false);
@@ -31,16 +34,13 @@ function IcuType1Form({ id, classes, name, db, setFresh, setLoading }) {
     setLoading(true);
     setDisabled(true);
     fetch(
-      `http://localhost:8080/model/ts/1?id=${id}&name=${name}&gcs=${gcs}&urine=${urine}&bun=${bun}&creatanine=${creatanine}`
+      `http://localhost:8080/model/ts/3?name=${name}&gcs=${gcs}&urine=${urine}&bun=${bun}&creatanine=${creatanine}&glucose=${glucose}&sodium=${sodium}`
     )
       .then(data => data.json())
-      .then(data2 => {
-        console.log(data2.val);
-        return JSON.parse(data2.val);
-      })
       .then(res => {
         console.log(res);
-        writeToDB(name, res);
+        console.log(JSON.parse(res));
+        writeToDB(name, res.val);
       });
   };
   const writeToDB = (name, res) => {
@@ -144,6 +144,23 @@ function IcuType1Form({ id, classes, name, db, setFresh, setLoading }) {
             onChange={e => setCreatanine(e.target.value)}
           />
 
+          <TextField
+            required
+            id="standard-required"
+            label="Glucose Level"
+            className={classes.textField}
+            margin="normal"
+            onChange={e => setGlucose(e.target.value)}
+          />
+
+          <TextField
+            required
+            id="standard-required"
+            label="Sodium Level"
+            className={classes.textField}
+            margin="normal"
+            onChange={e => setSodium(e.target.value)}
+          />
           <Button
             variant="contained"
             color="secondary"
@@ -159,4 +176,4 @@ function IcuType1Form({ id, classes, name, db, setFresh, setLoading }) {
   );
 }
 
-export default withStyles(style)(IcuType1Form);
+export default withStyles(style)(IcuType3Form);

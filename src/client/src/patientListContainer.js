@@ -16,12 +16,12 @@ import styles from "./appStyle.js";
 class PatientListContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = { selectedIndex: -1, testData: " " };
+    this.state = { selectedIndex: -1, testData: " ", patientList: [] };
   }
 
   handleListItemClick = (event, index) => {
     this.setState({ selectedIndex: index });
-    this.getDataFromModel(index, " item");
+    this.props.setInfo(this.state.patientList.find(o => o.id === index));
   };
   getDataFromModel = (firstName, lastName) => {
     fetch(
@@ -33,42 +33,64 @@ class PatientListContainer extends Component {
         this.setState({ testData: data.name });
       });
   };
-  infoRedirect = e => {
-    window.location.href = "/detail";
+  infoRedirect = (e, item) => {
+    window.location.href = `/detail?name=${item.Name}&id=${item.id}`;
   };
+
+  componentDidMount() {
+    const { db } = this.props;
+    let arr = [];
+
+    db
+      .collection("patientData")
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          let id = doc.id.toString();
+          let data = doc.data();
+          let temp = { ...data };
+          temp.id = id;
+          arr.push(temp);
+        });
+      })
+      .then(() => {
+        this.setState({ patientList: arr });
+      });
+  }
+
   render() {
     const classes = this.props.classes;
 
     return (
       <div className={classes.testDiv}>
         <List className={classes.listRoot}>
-          <ListItem
-            selected={this.state.selectedIndex === 0}
-            onClick={event => this.handleListItemClick(event, 0)}
-          >
-            <ListItemText primary={this.state.testData} />
-            <ListItemSecondaryAction>
-              <IconButton
-                edge="end"
-                aria-label="info"
-                onClick={e => this.infoRedirect(e)}
-              >
-                <InfoIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-          <Divider />
-          <ListItem
-            selected={this.state.selectedIndex === 1}
-            onClick={event => this.handleListItemClick(event, 1)}
-          >
-            <ListItemText primary={this.state.testData} />
-            <ListItemSecondaryAction>
-              <IconButton edge="end" aria-label="info">
-                <InfoIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
+          {this.state.patientList
+            ? this.state.patientList.map((item, idx) => {
+                return (
+                  <ListItem
+                    key={item.id}
+                    selected={this.state.selectedIndex === item.id}
+                    onClick={event => this.handleListItemClick(event, item.id)}
+                  >
+                    <ListItemText primary={item.Name} />
+                    <ListItemSecondaryAction>
+                      <IconButton
+                        edge="end"
+                        aria-label="info"
+                        onClick={e => this.infoRedirect(e, item)}
+                        className={
+                          item.Danger_Level == "High"
+                            ? classes.redChip2
+                            : classes.greenChip2
+                        }
+                      >
+                        <InfoIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                );
+              })
+            : ""}
         </List>
       </div>
     );

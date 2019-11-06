@@ -1,22 +1,236 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Archivo+Black|Viga&display=swap");
+
+@import url(https://fonts.googleapis.com/css?family=Lato);
+
 .App {
   text-align: center;
+  overflow-x: hidden;
 }
-
-.App-logo {
-  height: 40vmin;
+body {
+  margin: 0;
 }
-
-.App-header {
-  background-color: #282c34;
+.specialText {
+  /* font-family: "Archivo Black", sans-serif; */
+  color: #66ccff;
+  font-weight: 400;
+  font-size: 42px;
+}
+.successWrapper {
+  color: #c01f3c;
+  font-weight: 200;
+  font-size: 36px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  width: 100%;
+  text-align: center;
+}
+.specialSmallText {
+  margin-top: 20px;
+  max-width: 350px;
+  white-space: initial;
+  word-wrap: break-word;
+  font-size: 14px;
+  font-weight: 40;
+  color: #ffffff;
+  display: block;
+}
+.landingBackground {
+  /* width: 100%; */
+  background: #131212;
   min-height: 100vh;
+  color: #b4b3b3;
+  font-weight: 200;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  flex-direction: column;
+  padding-left: 5%;
+}
+.landingBackgroundContentHolder {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #09d3ac;
+.landingBackgroundText {
+  font-size: 1.5rem;
+  font-family: "Lato";
+  text-align: left;
+}
+
+.landingBackgroundText2 {
+  font-family: "Lato";
+  font-size: 1.5rem;
+  color: #a02c2c;
+  text-align: center;
+}
+.landingBackgroundProgress {
+  width: 95%;
+}
+.landingBackgroundAction {
+  margin-top: 20%;
+  text-align: left;
+}
+.imploreArea {
+  min-height: 100px;
+  margin-top: 8%;
+  margin-bottom: 8%;
+  /* font-family: "Viga", sans-serif; */
+  font-size: 34px;
+  text-align: left;
+  color: #2c2a2a;
+  font-weight: 200;
+  display: flex;
+  /* flex-wrap: wrap; */
+  padding-left: 5%;
+  padding-right: 5%;
+  justify-content: space-around;
+}
+.imploreTextWrapper {
+  max-width: 400px;
+}
+@media (max-width: 800px) {
+  .imploreArea {
+    flex-wrap: wrap;
+  }
+  .imploreTextWrapper {
+    flex: 0 0 100%;
+    font-size: 22px;
+    margin-bottom: 10%;
+  }
+}
+.landingBackgroundImage {
+  text-align: left;
+  max-width: 50%;
+}
+.landingBackgroundImage > img {
+  max-width: 85%;
+}
+.landingBackgroundMid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.authorArea {
+  text-align: center;
+  margin: 20px 20px 20px 20px;
+}
+.donateArea {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  justify-content: space-around;
+  text-align: left;
+}
+.thankContribution {
+  max-width: 275px;
+  width: auto;
+  text-align: center;
+}
+.thankContribution > img {
+  max-width: 95%;
+}
+.thankContributionText {
+  color: #c01f3c;
+  font-weight: 800;
+  font-size: 16px;
+}
+.specialTextCount {
+  color: #c01f3c;
+  font-weight: 800;
+  font-size: 48px;
+}
+@media screen and (max-width: 740px) {
+  .landingBackgroundMid {
+    align-items: space-between;
+  }
+  .landingBackgroundImage {
+    margin-top: 20%;
+    max-width: 80%;
+  }
+  .landingBackgroundImage > img {
+    max-width: 80%;
+  }
+}
+@media screen and (max-width: 917px) {
+  .landingBackgroundImage {
+    margin-top: 20%;
+    max-width: 60%;
+  }
+  .landingBackgroundImage > img {
+    max-width: 80%;
+  }
+
+  .landingBackgroundText {
+    margin-top: 10vh;
+  }
+  .landingBackgroundProgress {
+    margin-top: 10vh;
+  }
+}
+
+@media screen and (max-width: 451px) {
+  .landingBackgroundImage {
+    margin-top: 20%;
+    max-width: 100%;
+  }
+  .landingBackgroundImage > img {
+    max-width: 80%;
+  }
+}
+body {
+  height: 100vh;
+}
+
+.gleaming {
+  color: #66ccff;
+  letter-spacing: 0.6rem;
+  font-size: 1.4rem;
+  font-family: "Lato";
+  text-transform: uppercase;
+}
+.subtitle {
+  color: #d6dee2;
+  letter-spacing: 0.1rem;
+  font-size: 1rem;
+  font-family: "Lato";
+}
+
+.gleaming span {
+  animation: fadeIn 2s alternate infinite;
+  opacity: 0;
+}
+
+.methodDesc {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+.methodDescHead {
+  color: #5cafd3;
+  letter-spacing: 1rem;
+  font-size: 1.5rem;
+  font-family: "Lato";
+  text-transform: uppercase;
+}
+
+.methodDescText {
+  color: #28627a;
+  letter-spacing: 0.1rem;
+  font-size: 0.9rem;
+  font-family: "Lato";
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    filter: blur(10px);
+  }
+  50%,
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+  }
 }

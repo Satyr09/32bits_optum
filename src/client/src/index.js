@@ -6,6 +6,11 @@ import Detail from "./detail.js";
 import * as serviceWorker from "./serviceWorker";
 import database from "./firebase";
 
+import LandingPage from "./landingPage.js";
+
+import { withStyles } from "@material-ui/styles";
+import style from "./appStyle.js";
+
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 class Optum extends React.Component {
@@ -18,20 +23,27 @@ class Optum extends React.Component {
   }
 
   render() {
+    const classes = this.props.classes;
+
     return (
-      <Router>
-        <Switch>
-          <Route path="/detail" exact>
-            {this.state.db ? <Detail database={this.state.db} /> : <br />}
-          </Route>
-          <Route path="/" exact>
-            {this.state.db ? <App database={this.state.db} /> : <br />}
-          </Route>
-        </Switch>
-      </Router>
+      <div>
+        <Router>
+          <Switch>
+            <Route path="/" exact>
+              <LandingPage />
+            </Route>
+            <Route path="/detail" exact>
+              {this.state.db ? <Detail database={this.state.db} /> : <br />}
+            </Route>
+            <Route path="/patient" exact>
+              {this.state.db ? <App database={this.state.db} /> : <br />}
+            </Route>
+          </Switch>
+        </Router>
+      </div>
     );
   }
 }
-
-ReactDOM.render(<Optum />, document.getElementById("root"));
+const StyledOptum = withStyles(style)(Optum);
+ReactDOM.render(<StyledOptum />, document.getElementById("root"));
 serviceWorker.unregister();

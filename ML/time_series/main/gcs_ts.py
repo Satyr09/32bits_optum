@@ -4,13 +4,12 @@ Created on Sun Nov  3 00:45:25 2019
 
 @author: Avigyan
 """
-
+import sys
 from pandas import read_csv
 from statsmodels.tsa.arima_model import ARIMA
 
-
-
-series= read_csv('F:\\optum\\data\\time_data\\gcs.csv')
+path = sys.argv[1]
+series= read_csv(path)
 x = series.values.astype('float32')
 
 
@@ -20,4 +19,5 @@ model_fit = model.fit(disp=0)
 output = model_fit.forecast()
 yhat = output[0]
 
-print(yhat)
+print(yhat[0])
+sys.stdout.flush()
