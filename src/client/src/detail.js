@@ -288,7 +288,7 @@ class Detail extends Component {
                       label={`Creatinine :
                         ${this.state.records
                           ? this.state.records[this.state.records.length - 1]
-                              .creatanine
+                              .creatinine
                           : ""}`}
                     />
                   </Typography>

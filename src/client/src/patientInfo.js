@@ -2,6 +2,11 @@ import React, { Component } from "react";
 import styles from "./appStyle.js";
 import { withStyles } from "@material-ui/styles";
 
+/*-------------Email & Report Genration imports---------------*/
+import * as emailjs from "emailjs-com";
+import jsPDF from "jspdf";
+/*-----------------------------------------------------------*/
+
 /* material-ui imports*/
 
 import Divider from "@material-ui/core/Divider";
@@ -36,7 +41,11 @@ class patientInfo extends Component {
     super(props);
     console.log(this.props);
     console.log(this.props.info);
-    this.state = { open: false, mortalityRisk: "" };
+    this.state = {
+      open: false,
+      mortalityRisk: "",
+      generateReportStatus: false
+    };
   }
   ICU = [
     "Dept : Coronary unit care ",
@@ -47,7 +56,7 @@ class patientInfo extends Component {
   refreshInfoHelper = () => {
     const { db } = this.props;
     let docRef = db.collection("patientData").doc(this.props.info.id);
-
+    this.setState({ generateReportStatus: true });
     docRef.get().then(doc => {
       if (doc.exists) this.props.refreshInfo(doc.data());
       else console.error("haalp!");
@@ -77,13 +86,46 @@ class patientInfo extends Component {
               .update({
                 Danger_Level: this.state.mortalityRisk
               })
-              .then(() => this.refreshInfoHelper())
+              .then(() => {this.refreshInfoHelper();this.sendMail()})
               .catch(err => console.error(err));
           }
         );
       });
   };
 
+  generateReport = () => {
+    var doc = new jsPDF();
+
+    Object.keys(this.props.info).forEach((key, i) => {
+      doc.text(20, 10 + i * 10, `${key} : ${this.props.info[key]}`);
+    });
+
+    doc.save(
+      `${this.props.info.Name}_${new Date().toLocaleDateString(
+        "en-IN"
+      )}_Report.pdf`
+    );
+  };
+
+  sendMail = () => {
+    const email = "32_bits";
+
+    let templateParams = {
+      from_name: email,
+      to_who: "daipayan.mukherjee09@gmail.com",
+      to_name: "Doctor X.",
+      patient_name: this.props.info.Name,
+      mortality_risk: this.props.info.Danger_Level,
+      message_html:
+        '<a href="http://localhost:3000"><button style="background-color:blue;color:white;font-size:18px;padding:10px 10px 10px 10px;"> Go to Dashboard.</button></a> '
+    };
+    emailjs.send(
+      "gmail",
+      "template_eZdIxnaq",
+      templateParams,
+      "user_HfkI6Wqlzdzl9o7Rk49nC"
+    );
+  };
   handleClose = () => {
     this.setState({ open: false });
   };
@@ -192,6 +234,8 @@ class patientInfo extends Component {
                 variant="contained"
                 color="secondary"
                 className={classes.button}
+                disabled={!this.state.generateReportStatus}
+                onClick={this.generateReport}
               >
                 Generate Report
               </Button>
