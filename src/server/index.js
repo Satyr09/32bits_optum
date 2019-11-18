@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 
 const os = require("os");
 const fs = require("fs");
+const csv = require("csvtojson");
 
 const { promisify } = require("util");
 
@@ -32,6 +33,82 @@ app.get("/api/getUsername", (req, res) =>
 );
 
 const createProcess = type => {};
+
+/*---------------------Patient Similarity------------------*/
+
+app.post("/model/similar", async (req, res) => {
+  let data = req.body;
+  console.log("TRYING TO DETECT NEAREST NEIGHBOURS------------------");
+  console.log(data);
+  try {
+    const csvData = await csv().fromFile("./src/mean_icutype_1.csv");
+    console.log(csvData[0]);
+
+    let mostSim = -1;
+    let secondMostSim = -1;
+    const result = [];
+
+    for (i = 0; i < csvData.length; i++) {
+      const record = csvData[i];
+      const dot =
+        data.GCS_mean * record.GCS_mean + data.BUN_mean * record.BUN_mean;
+      const dataSq =
+        data.GCS_mean * data.GCS_mean + data.BUN_mean * data.BUN_mean;
+      const recSq =
+        record.GCS_mean * record.GCS_mean + record.BUN_mean * record.BUN_mean;
+
+      const temp = dot / (Math.sqrt(dataSq) * Math.sqrt(recSq));
+      if (temp > mostSim) {
+        mostSim = temp;
+        result[0] = { id: record.RecordID, similarity: mostSim };
+      } else if (temp > secondMostSim) {
+        secondMostSim = temp;
+        result[1] = { id: record.RecordID, similarity: secondMostSim };
+      }
+    }
+
+    console.log(result);
+    res.send({
+      mostSimID: result[0].id,
+      secmostSimID: result[1].id,
+      sim1: result[0].similarity,
+      sim2: result[1].similarity
+    });
+  } catch (err) {
+    console.log("ERRRRRRROOOOOOOORRRRRRRR");
+    console.error(err);
+  }
+});
+
+/*-------------------- RECO SYS -------------------------*/
+
+app.post("/model/reco", async (req, res) => {
+  let { gcs, creatinine, bun, urine } = req.body;
+
+  let spawn = require("child_process").spawn;
+  let gcsProcess = spawn("python", [
+    "ML/time_series/main/recof.py",
+    bun > 21 ? 1 : 0,
+    gcs > 15 ? 1 : 0,
+    creatinine > 1.2 ? 1 : 0,
+    urine > 2000 ? 1 : 0
+  ]);
+  console.log("process spawned....................... RECO FOR ICU TYPE : 1 ");
+
+  gcsProcess.stdout.setEncoding("utf8");
+  gcsProcess.stdout.on("data", data => {
+    console.log("DATA RECEIVED--------- RECO ");
+    console.log(data);
+    res.send({ val: data.toString() });
+  });
+
+  gcsProcess.stderr.setEncoding("utf8");
+  gcsProcess.stderr.on("data", err => {
+    console.log(err);
+    console.error(err);
+    // res.sendStatus(501);
+  });
+});
 
 /*-------------------- TIME SERIES PREDICTIONS ----------------*/
 
@@ -82,7 +159,7 @@ app.get("/model/ts/1", async (req, res) => {
   gcsProcess.stderr.on("data", err => {
     console.log(err);
     console.error(err);
-    res.sendStatus(501);
+    // res.sendStatus(501);
   });
 });
 

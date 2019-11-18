@@ -86,7 +86,10 @@ class patientInfo extends Component {
               .update({
                 Danger_Level: this.state.mortalityRisk
               })
-              .then(() => {this.refreshInfoHelper();this.sendMail()})
+              .then(() => {
+                this.refreshInfoHelper();
+                this.sendMail();
+              })
               .catch(err => console.error(err));
           }
         );
@@ -109,22 +112,38 @@ class patientInfo extends Component {
 
   sendMail = () => {
     const email = "32_bits";
+    let simData;
+    fetch("http://localhost:8080/model/similar", {
+      method: "post",
+      body: JSON.stringify(this.props.info),
+      headers: { "Content-Type": "application/json" }
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log("HAMBAAAAAAAAAAAAAAA");
+        console.log(data);
+        simData = data;
 
-    let templateParams = {
-      from_name: email,
-      to_who: "daipayan.mukherjee09@gmail.com",
-      to_name: "Doctor X.",
-      patient_name: this.props.info.Name,
-      mortality_risk: this.props.info.Danger_Level,
-      message_html:
-        '<a href="http://localhost:3000"><button style="background-color:blue;color:white;font-size:18px;padding:10px 10px 10px 10px;"> Go to Dashboard.</button></a> '
-    };
-    emailjs.send(
-      "gmail",
-      "template_eZdIxnaq",
-      templateParams,
-      "user_HfkI6Wqlzdzl9o7Rk49nC"
-    );
+        let templateParams = {
+          from_name: email,
+          to_who: "daipayan.mukherjee09@gmail.com",
+          to_name: "Doctor X.",
+          patient_name: this.props.info.Name,
+          mortality_risk: this.props.info.Danger_Level,
+          similarity_rec1: simData.mostSimID,
+          similarity_rec2: simData.secmostSimID,
+          sim1: simData.sim1,
+          sim2: simData.sim2,
+          message_html:
+            '<a href="http://localhost:3000"><button style="background-color:blue;color:white;font-size:18px;padding:10px 10px 10px 10px;"> Go to Dashboard.</button></a> '
+        };
+        emailjs.send(
+          "gmail",
+          "template_eZdIxnaq",
+          templateParams,
+          "user_HfkI6Wqlzdzl9o7Rk49nC"
+        );
+      });
   };
   handleClose = () => {
     this.setState({ open: false });

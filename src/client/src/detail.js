@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/styles";
 import style from "./appStyle.js";
+import * as emailjs from "emailjs-com";
 
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -96,15 +97,56 @@ class Detail extends Component {
     });
   }
 
+  mailFunc() {
+    console.log("CALLED MAILFUNC");
+    let rec = this.state.records[this.state.records.length - 1];
+    fetch("http://localhost:8080/model/reco", {
+      method: "post",
+      body: JSON.stringify(rec),
+      headers: { "Content-Type": "application/json" }
+    })
+      .then(res => res.json())
+      .then(res2 => {
+        console.log(res2.val);
+        return JSON.parse(res2.val);
+      })
+      .then(data => {
+        const email = "32_bits";
+        console.log(data);
+        let templateParams = {
+          from_name: email,
+          to_who: "daipayan.mukherjee09@gmail.com",
+          to_name: "Doctor X.",
+          patient_name: this.state.patientName,
+          reco1: data.reco1,
+          reco2: data.reco2,
+          reco3: data.reco3,
+          reco4: data.reco4,
+          reco5: data.reco5,
+          message_html:
+            '<a href="http://localhost:3000"><button style="background-color:blue;color:white;font-size:18px;padding:10px 10px 10px 10px;"> Go to Dashboard.</button></a> '
+        };
+        emailjs.send(
+          "gmail",
+          "reco",
+          templateParams,
+          "user_HfkI6Wqlzdzl9o7Rk49nC"
+        );
+      });
+  }
+
   fetchPreds = () => {
     const db = this.props.database;
     let docRef = db.collection("patientData").doc(this.state.id);
     docRef.get().then(doc => {
       if (doc.exists) {
-        this.setState({
-          records: doc.data().Records,
-          isFresh: false
-        });
+        this.setState(
+          {
+            records: doc.data().Records,
+            isFresh: false
+          },
+          () => this.mailFunc()
+        );
       }
     });
   };
